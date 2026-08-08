@@ -1,0 +1,45 @@
+{
+  "name": "blindrelay",
+  "version": "1.0.0",
+  "description": "Send transactional email and manage sending domains, OTLP observability, and suppression via Blindrelay — a zero-content EU email relay. Cursor-optimized entry: set BLINDRELAY_API_KEY once under Plugins → Configure; no manual header editing.",
+  "author": {
+    "name": "Blindrelay",
+    "email": "info@blindrelay.app",
+    "url": "https://blindrelay.app"
+  },
+  "homepage": "https://blindrelay.app/docs/mcp",
+  "repository": "https://github.com/blindrelay-app/agent-plugin",
+  "license": "MIT",
+  "keywords": [
+    "email",
+    "transactional-email",
+    "mcp",
+    "send-mail",
+    "dkim",
+    "dmarc",
+    "spf",
+    "otlp",
+    "observability",
+    "gdpr",
+    "eu",
+    "zero-content"
+  ],
+  "mcpServers": ".cursor-plugin/mcp.json",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "BLINDRELAY_API_KEY": {
+        "type": "string",
+        "title": "Blindrelay API key",
+        "description": "Scoped API key from https://blindrelay.app/keys (one-time reveal). Scopes: send (Free), read/write (Starter+). Stored only in the Cursor dashboard, never in the plugin repo."
+      },
+      "BLINDRELAY_MCP_URL": {
+        "type": "string",
+        "title": "Blindrelay MCP endpoint URL",
+        "description": "Streamable HTTP MCP endpoint. Default: production. Use https://api.stag.blindrelay.app/mcp for staging, or http://127.0.0.1:18082/mcp for a local backend.",
+        "default": "https://api.blindrelay.app/mcp"
+      }
+    },
+    "required": ["BLINDRELAY_API_KEY"]
+  }
+}

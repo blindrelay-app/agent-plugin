@@ -1,0 +1,28 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "blindrelay",
+  "version": "1.0.0",
+  "description": "Send transactional email and manage sending domains, OTLP observability, and suppression via Blindrelay — a zero-content EU email relay. Packages the Blindrelay MCP server plus agent skills so any Agent-Plugins-compatible client can send mail and operate tenants without reinventing setup.",
+  "author": {
+    "name": "Blindrelay",
+    "email": "info@blindrelay.app",
+    "url": "https://blindrelay.app"
+  },
+  "homepage": "https://blindrelay.app/docs/mcp",
+  "repository": "https://github.com/blindrelay-app/agent-plugin",
+  "license": "MIT",
+  "keywords": [
+    "email",
+    "transactional-email",
+    "mcp",
+    "send-mail",
+    "dkim",
+    "dmarc",
+    "spf",
+    "otlp",
+    "observability",
+    "gdpr",
+    "eu",
+    "zero-content"
+  ]
+}
