@@ -17,14 +17,8 @@ The Blindrelay MCP server is available over two transports with the same tool su
 ```
 
 - No local binary. Works on any host that speaks MCP over HTTP.
+- Endpoint: `https://api.blindrelay.app/mcp` (production).
 - Auth: `Authorization: Bearer <api_key>` header, configured in your client's MCP/auth settings (the plugin deliberately omits it — secrets must not ship inside a plugin package).
-- Endpoints by environment:
-
-| Environment | URL |
-|-------------|-----|
-| Production | `https://api.blindrelay.app/mcp` |
-| Staging | `https://api.stag.blindrelay.app/mcp` |
-| Local backend | `http://127.0.0.1:$PORT/mcp` (same `PORT` as the backend) |
 
 ## stdio (optional, local binary)
 

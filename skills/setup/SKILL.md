@@ -47,5 +47,5 @@ Hand off to the right skill:
 ## Reference
 
 - [tools.md](../../references/tools.md) — every tool, its args, and required scope.
-- [transports.md](../../references/transports.md) — streamable-http vs stdio, staging, self-hosted.
+- [transports.md](../../references/transports.md) — streamable-http vs stdio, self-hosted.
 - [no-content-on-disk.md](../../references/no-content-on-disk.md) — the load-bearing invariant you must not violate.

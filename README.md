@@ -26,7 +26,7 @@ agent-plugin/
 ├── references/
 │   ├── tools.md                      # full tool reference + scopes + error codes
 │   ├── no-content-on-disk.md         # the load-bearing invariant
-│   └── transports.md                 # streamable-http vs stdio, staging, self-hosted
+│   └── transports.md                 # streamable-http vs stdio, self-hosted
 ├── README.md
 └── LICENSE
 ```
@@ -48,7 +48,7 @@ The `.cursor-plugin/` layer declares two dashboard variables. Set them once unde
 | Variable | Required | Purpose |
 |----------|----------|---------|
 | `BLINDRELAY_API_KEY` | yes | Scoped API key from <https://blindrelay.app/keys> (one-time reveal). Stored only in the Cursor dashboard, never in the plugin repo. |
-| `BLINDRELAY_MCP_URL` | no | MCP endpoint. Defaults to `https://api.blindrelay.app/mcp`. Use `https://api.stag.blindrelay.app/mcp` for staging, or `http://127.0.0.1:18082/mcp` for a local backend. |
+| `BLINDRELAY_MCP_URL` | no | MCP endpoint. Defaults to the production endpoint `https://api.blindrelay.app/mcp`. |
 
 Cursor substitutes `${BLINDRELAY_API_KEY}` into the `Authorization: Bearer …` header and `${BLINDRELAY_MCP_URL}` into the server URL automatically. No manual header editing.
 
@@ -78,16 +78,6 @@ Ask your agent in plain language:
 - "What changed in my tenant in the last week?" (audit log)
 
 The skills activate automatically based on intent. The agent will never log a recipient address or email body after a send.
-
-## Environments
-
-| Environment | MCP URL |
-|-------------|---------|
-| Production | `https://api.blindrelay.app/mcp` |
-| Staging | `https://api.stag.blindrelay.app/mcp` |
-| Local backend | `http://127.0.0.1:$PORT/mcp` |
-
-To target staging or local, edit the `url` in `mcp.json` (or your client's override).
 
 ## Safety properties
 
