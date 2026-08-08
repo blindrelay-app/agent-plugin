@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Blindrelay">
+  <rect width="256" height="256" rx="56" fill="#0b0f14"/>
+  <g transform="scale(8)">
+    <path fill="#e2e8f0" d="M5 8.5 13.5 16 5 23.5h3.2L16.7 16 8.2 8.5H5zm9 0L22.5 16 14 23.5h3.2L25.7 16 17.2 8.5H14z"/>
+  </g>
+</svg>
