@@ -33,18 +33,6 @@
         "title": "Blindrelay API key (PAT, optional)",
         "description": "Optional. Only for the PAT server (api-pat). Leave empty and enable the OAuth `blindrelay` server for Connect. Same `br_…` keys as the Keys UI. Never both servers at once with an empty key.",
         "default": ""
-      },
-      "BLINDRELAY_MCP_URL": {
-        "type": "string",
-        "title": "OAuth MCP URL",
-        "description": "Streamable HTTP MCP on the OAuth host. Default production: https://api.blindrelay.app/mcp",
-        "default": "https://api.blindrelay.app/mcp"
-      },
-      "BLINDRELAY_MCP_PAT_URL": {
-        "type": "string",
-        "title": "PAT MCP URL",
-        "description": "Streamable HTTP MCP on the PAT host. Default production: https://api-pat.blindrelay.app/mcp",
-        "default": "https://api-pat.blindrelay.app/mcp"
       }
     }
   }
