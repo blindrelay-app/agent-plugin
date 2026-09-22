@@ -69,7 +69,7 @@ No args. Returns `UsageHistoryRow[]` with `period`, `domain`, `message_count`, `
 
 ### `delivery_stats` — delivery counters
 
-No args. Returns `{ pending, relay_accepted, delivered, failed, failed_breakdown, retention_hours, smtp_uses_relay }`. Use this to answer "did my emails deliver / bounce". Counters are integer buckets, not per-message rows — no content, no plaintext addresses.
+Args: `period_hours` (optional, hours, default = envelope retention), `domain` (optional sending domain), `egress_key` (optional). Returns `{ pending, relay_accepted, delivered, failed, failed_breakdown, retention_hours, period_hours, domain?, egress_key? }`. Pending is only populated when unfiltered. Content-free counters — no per-message rows.
 
 ## Suppression
 
@@ -83,7 +83,11 @@ Args: `format` (optional, default `json`; also `csv`). Returns entries with `to_
 
 ### `suppression_remove` — remove a suppression entry
 
-Args: `id` (the entry UUID from `suppression_list`). Returns `{"ok":true}`. **Confirm with the user first.** Removing a hard-bounce suppression lets future sends to that recipient attempt delivery again — only do this when the user states the original failure was transient (e.g. a mailbox-full that has since cleared) or the recipient explicitly asked to be re-added. Never bulk-remove on the agent's own initiative.
+Args: `id` (the entry UUID from `suppression_list`). Returns `{"ok":true}`. Only **soft-bounce** rows can be removed.
+
+### `suppression_add` — hash-only manual add
+
+Args: `address` (plaintext once; hashed bcrypt cost 12 in process; never log) **or** `to_hash` (precomputed bcrypt). Returns `{ id, reason=manual_suppression, created_at }`. Do not echo the address.
 
 ## Audit
 

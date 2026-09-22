@@ -1,8 +1,8 @@
 # MCP transports
 
-The Blindrelay MCP server is available over two transports with the same tool surface. The plugin ships the Streamable HTTP variant because it needs no local binary install. You can switch to stdio if you prefer a local process.
+Install the **Agent Plugin**. Hosted `/mcp` is infrastructure, not the customer install story.
 
-## Streamable HTTP (default, what this plugin ships)
+## Dual Streamable HTTP (what this plugin ships)
 
 ```json
 {
@@ -11,68 +11,24 @@ The Blindrelay MCP server is available over two transports with the same tool su
     "blindrelay": {
       "type": "streamable-http",
       "url": "https://api.blindrelay.app/mcp"
-    }
-  }
-}
-```
-
-- No local binary. Works on any host that speaks MCP over HTTP.
-- Endpoint: `https://api.blindrelay.app/mcp` (production).
-- Auth: `Authorization: Bearer <api_key>` header, configured in your client's MCP/auth settings (the plugin deliberately omits it — secrets must not ship inside a plugin package).
-
-## stdio (optional, local binary)
-
-For hosts that prefer a local process (Cursor, Claude Desktop). Binary: `blindrelay-mcp`.
-
-Install:
-
-```bash
-# Linux (checksum-verified)
-curl -fsSL https://blindrelay.app/install.sh | sh
-export PATH="$HOME/.local/bin:$PATH"
-
-# macOS
-brew tap blindrelay/tap https://blindrelay.app/tap.git
-brew install blindrelay/tap/blindrelay-mcp
-
-# Contributors (from this repo)
-cargo install --path mcp
-```
-
-Auth: `BLINDRELAY_API_KEY` env var, or `blindrelay auth login` once (writes `~/.config/blindrelay/credentials.json`).
-
-To use stdio instead of the shipped HTTP server, replace the `blindrelay` entry in your client's MCP config with:
-
-```json
-{
-  "mcpServers": {
-    "blindrelay": {
-      "type": "stdio",
-      "command": "blindrelay-mcp",
-      "env": {
-        "BLINDRELAY_API_KEY": "br_…"
+    },
+    "blindrelay-pat": {
+      "type": "streamable-http",
+      "url": "https://api-pat.blindrelay.app/mcp",
+      "headers": {
+        "Authorization": "Bearer ${BLINDRELAY_API_KEY}"
       }
     }
   }
 }
 ```
 
-Prefer an **absolute path** for `command` when the host does not inherit your shell `PATH`:
+Enable **one** entry. Default plan is OAuth Connect (`blindrelay`) after web signup. PAT is the same `br_…` key as the Keys UI, only on `api-pat.*`. Details: [dual-origin.md](dual-origin.md).
 
-| Install path | Absolute `command` |
-|--------------|-------------------|
-| Homebrew (Apple Silicon) | `/opt/homebrew/bin/blindrelay-mcp` |
-| Homebrew (Intel) | `/usr/local/bin/blindrelay-mcp` |
-| Linux curl installer | `$HOME/.local/bin/blindrelay-mcp` |
+Do not add SSE on `GET /mcp` for Cursor idle resume. If a host suspends Streamable HTTP, set `"http.fetchAdditionalSupport": false` rather than inventing GET SSE.
 
-Logs go to **stderr** only (stdout is the MCP JSON-RPC stream).
+Protocol version advertised on initialize: `2026-07-28`.
 
-## Self-hosted / on-prem
+## Self-hosted
 
-If you operate your own Blindrelay backend, point the `url` (Streamable HTTP) or `BLINDRELAY_BASE_URL` (stdio) at your instance's machine API host. The MCP gateway is served at `/mcp` on the same host as `/v1/*`. Caddy/Traefik must route `/mcp` to the backend on the `api.*` host.
-
-## Choosing
-
-- **Remote agents, no local install, cross-client portability** → Streamable HTTP (the shipped default).
-- **Desktop host, you already `brew install` the toolbelt, you want env-based auth** → stdio.
-- **Air-gapped / on-prem** → whichever transport reaches your backend; stdio with `BLINDRELAY_BASE_URL` is often simplest.
+Point `url` at your instance. `Host` selects PAT vs OAuth (`MCP_PUBLIC_URL`, `MCP_PAT_HOST`). Traefik must route `/mcp` and `/.well-known` on `api.*`, and `/mcp` only (no well-known) on `api-pat.*`.

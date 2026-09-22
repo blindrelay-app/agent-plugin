@@ -2,7 +2,11 @@
   "mcpServers": {
     "blindrelay": {
       "type": "streamable-http",
-      "url": "${BLINDRELAY_MCP_URL}",
+      "url": "${BLINDRELAY_MCP_URL}"
+    },
+    "blindrelay-pat": {
+      "type": "streamable-http",
+      "url": "${BLINDRELAY_MCP_PAT_URL}",
       "headers": {
         "Authorization": "Bearer ${BLINDRELAY_API_KEY}"
       }

@@ -4,6 +4,10 @@
     "blindrelay": {
       "type": "streamable-http",
       "url": "https://api.blindrelay.app/mcp"
+    },
+    "blindrelay-pat": {
+      "type": "streamable-http",
+      "url": "https://api-pat.blindrelay.app/mcp"
     }
   }
 }
