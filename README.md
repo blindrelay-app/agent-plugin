@@ -17,7 +17,7 @@ agent-plugin/
 ├── mcp.json                          # blindrelay MCP server (Streamable HTTP, no secrets)
 ├── .cursor-plugin/                   # Cursor-optimized layer (optional, single-click auth)
 │   ├── plugin.json                   #   Cursor manifest + variables (BLINDRELAY_API_KEY)
-│   └── mcp.json                      #   MCP config using ${BLINDRELAY_API_KEY} / ${BLINDRELAY_MCP_URL}
+│   └── mcp.json                      #   Fixed OAuth + PAT URLs; PAT header uses ${BLINDRELAY_API_KEY}
 ├── skills/
 │   ├── setup/SKILL.md                # onboarding + auth
 │   ├── send-mail/SKILL.md            # send transactional email
@@ -49,15 +49,13 @@ Agent Plugins 1.0 does not let a plugin carry secrets, so the API key is client-
 
 ### Example: Cursor
 
-The `.cursor-plugin/` layer declares two dashboard variables. Set them once under **Plugins → Configure**:
+The `.cursor-plugin/` layer declares one dashboard variable. Set it once under **Plugins → Configure** when using the PAT server:
 
 | Variable | Required | Purpose |
 |----------|----------|---------|
 | `BLINDRELAY_API_KEY` | no | Optional PAT for `blindrelay-pat` only. Leave empty if using OAuth Connect. |
-| `BLINDRELAY_MCP_URL` | no | OAuth MCP URL. Default `https://api.blindrelay.app/mcp`. |
-| `BLINDRELAY_MCP_PAT_URL` | no | PAT MCP URL. Default `https://api-pat.blindrelay.app/mcp`. |
 
-Cursor substitutes `${BLINDRELAY_API_KEY}` into the `Authorization: Bearer …` header and `${BLINDRELAY_MCP_URL}` into the server URL automatically. No manual header editing.
+The two endpoint URLs are fixed in the plugin (`https://api.blindrelay.app/mcp` and `https://api-pat.blindrelay.app/mcp`). They are not settings. Cursor substitutes `${BLINDRELAY_API_KEY}` into the PAT server's `Authorization: Bearer …` header. No manual header editing.
 
 ### Claude, ChatGPT, and other clients
 

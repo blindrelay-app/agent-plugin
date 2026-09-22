@@ -31,4 +31,4 @@ Protocol version advertised on initialize: `2026-07-28`.
 
 ## Self-hosted
 
-Point `url` at your instance. `Host` selects PAT vs OAuth (`MCP_PUBLIC_URL`, `MCP_PAT_HOST`). Traefik must route `/mcp` and `/.well-known` on `api.*`, and `/mcp` only (no well-known) on `api-pat.*`.
+The customer Configure screen does not expose the MCP URLs. A self-hosted build replaces the two `url` values in `mcp.json` and `.cursor-plugin/mcp.json`. `Host` selects PAT vs OAuth (`MCP_PUBLIC_URL`, `MCP_PAT_HOST`). Traefik must route `/mcp` and `/.well-known` on `api.*`, and `/mcp` only (no well-known) on `api-pat.*`.
