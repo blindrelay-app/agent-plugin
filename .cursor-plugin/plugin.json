@@ -30,16 +30,22 @@
     "properties": {
       "BLINDRELAY_API_KEY": {
         "type": "string",
-        "title": "Blindrelay API key",
-        "description": "Scoped API key from https://blindrelay.app/keys (one-time reveal). Scopes: send (Free), read/write (Starter+). Stored only in the Cursor dashboard, never in the plugin repo."
+        "title": "Blindrelay API key (PAT, optional)",
+        "description": "Optional. Only for the PAT server (api-pat). Leave empty and enable the OAuth `blindrelay` server for Connect. Same `br_…` keys as the Keys UI. Never both servers at once with an empty key.",
+        "default": ""
       },
       "BLINDRELAY_MCP_URL": {
         "type": "string",
-        "title": "Blindrelay MCP endpoint URL",
-        "description": "Streamable HTTP MCP endpoint. Defaults to the production endpoint https://api.blindrelay.app/mcp.",
+        "title": "OAuth MCP URL",
+        "description": "Streamable HTTP MCP on the OAuth host. Default production: https://api.blindrelay.app/mcp",
         "default": "https://api.blindrelay.app/mcp"
+      },
+      "BLINDRELAY_MCP_PAT_URL": {
+        "type": "string",
+        "title": "PAT MCP URL",
+        "description": "Streamable HTTP MCP on the PAT host. Default production: https://api-pat.blindrelay.app/mcp",
+        "default": "https://api-pat.blindrelay.app/mcp"
       }
-    },
-    "required": ["BLINDRELAY_API_KEY"]
+    }
   }
 }

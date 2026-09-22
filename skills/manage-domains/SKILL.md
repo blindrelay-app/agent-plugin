@@ -1,16 +1,16 @@
 ---
 name: manage-domains
-description: Register, inspect, verify, rotate DKIM, and remove sending domains in Blindrelay via the domains_* MCP tools. Use when the user says "add a sending domain", "verify DKIM/SPF/DMARC", "rotate DKIM key", "remove a domain", or sending fails with domain_not_verified.
+description: Register, inspect, verify, rotate DKIM, and remove sending domains in Blindrelay via the domains_* MCP tools. Use when the user says "add a sending domain", "verify DKIM/SPF/DMARC", "DNS records", "DNS prompt", "rotate DKIM key", "remove a domain", or sending fails with domain_not_verified.
 ---
 
 # Manage sending domains
 
-Required scopes: `read` for `domains_list` / `domains_get`; `write` for `domains_add` / `domains_verify` / `domains_rotate_dkim` / `domains_remove`. `read`/`write` need Starter+.
+Required scopes: `read` for `domains_list` / `domains_get` / `domains_dns_guide`; `write` for `domains_add` / `domains_verify` / `domains_rotate_dkim` / `domains_remove`. `read`/`write` need Starter+.
 
 ## Lifecycle
 
 ```
-domains_add  →  domains_get (publish DNS records)  →  domains_verify  →  send
+domains_add  →  domains_dns_guide (or domains_get)  →  publish DNS  →  domains_verify  →  send
                 domains_rotate_dkim (key rotation)        ↑ re-check
                 domains_remove (decommission)
 ```
@@ -25,16 +25,21 @@ Args:
 |-------|----------|-------|
 | `domain` | yes | Apex or subdomain you control DNS for, e.g. `mail.example.com`. |
 | `selector` | no | DKIM selector. Omit to let Blindrelay pick the default. |
+| `dedicated_ip_assignment_id` | no | Live dedicated IP assignment UUID. Required when the workspace is over the shared-domain cap. Get IDs from `dedicated_ip_get`. |
 
 Returns a `DomainDetail` with the DNS records you must publish: SPF (TXT), DKIM (TXT, public key), DMARC (TXT). **Do not** publish these to a public chat channel verbatim if the user is on a shared screen — confirm the user wants them shown; they are not secrets, but they are customer infra.
 
 ### `domains_list` — list sending domains
 
-No args. Returns `DomainSummary[]` with `id`, `domain`, `status`, `spf_verified`, `dkim_verified`, `dmarc_verified`, `created_at`. Use this to find the `id` you need for get/verify/rotate/remove.
+No args. Returns `DomainSummary[]` with `id`, `domain`, `status`, `spf_verified`, `dkim_verified`, `dmarc_verified`, `dedicated_ip_assignment_id`, `dedicated_ip_use_shared`, `created_at`. Use this to find the `id` you need for get/verify/rotate/remove.
 
 ### `domains_get` — fetch DNS/DKIM details
 
-Args: `id` (the domain UUID from `domains_list`). Returns the full `DomainDetail` including the exact TXT record values to publish. This is the tool to call when the user says "show me the DNS records for X".
+Args: `id` (the domain UUID from `domains_list`). Returns the full `DomainDetail` including the exact TXT record values to publish. Use this when the user wants structured JSON. For a copy-paste prompt a DNS agent can follow, use `domains_dns_guide` instead.
+
+### `domains_dns_guide` — LLM DNS publish prompt
+
+Args: `id`. Returns a plain-text prompt with the same three records as `domains_get` plus merge-SPF / split-DKIM / CNAME-proxy rules. Give this prompt to a DNS agent (Cloudflare MCP, registrar) as-is. Do not invent, omit, or paraphrase record values. After the records are saved, call `domains_verify` (or tell the user to click Verify now). This tool does not write customer DNS.
 
 ### `domains_verify` — re-check SPF/DKIM/DMARC
 
@@ -54,6 +59,18 @@ Rotation generates a new key pair. After rotation the user must publish the new 
 ### `domains_remove` — delete a sending domain
 
 Args: `id`. Returns `{"ok":true}`. This disables sends from the domain immediately. Confirm with the user before calling — removal is reversible only by re-adding and re-verifying.
+
+### `domains_set_dedicated_ip` — pin egress
+
+Args:
+
+| Field | Required | Notes |
+|-------|----------|-------|
+| `id` | yes | Domain UUID. |
+| `assignment_id` | no | Live assignment UUID from `dedicated_ip_get`. |
+| `use_shared` | no | `true` forces the shared pool. Cannot combine with `assignment_id`. |
+
+Omit both `assignment_id` and `use_shared` to follow the workspace default. See [dedicated-ip](../dedicated-ip/SKILL.md).
 
 ## No-content-on-disk
 
