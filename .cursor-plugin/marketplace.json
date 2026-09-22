@@ -1,0 +1,16 @@
+{
+  "name": "blindrelay",
+  "owner": {
+    "name": "Blindrelay"
+  },
+  "metadata": {
+    "description": "Blindrelay Agent Plugin"
+  },
+  "plugins": [
+    {
+      "name": "blindrelay",
+      "source": ".",
+      "description": "Send transactional email and manage sending domains, OTLP observability, and suppression via Blindrelay."
+    }
+  ]
+}
