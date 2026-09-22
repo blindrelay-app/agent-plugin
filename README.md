@@ -17,7 +17,8 @@ agent-plugin/
 ├── mcp.json                          # blindrelay MCP server (Streamable HTTP, no secrets)
 ├── .cursor-plugin/                   # Cursor-optimized layer (optional, single-click auth)
 │   ├── plugin.json                   #   Cursor manifest + variables (BLINDRELAY_API_KEY)
-│   └── mcp.json                      #   Fixed OAuth + PAT URLs; PAT header uses ${BLINDRELAY_API_KEY}
+│   ├── mcp.json                      #   Fixed OAuth + PAT URLs; PAT header uses ${BLINDRELAY_API_KEY}
+│   └── marketplace.json              #   Same repo as a one-plugin marketplace (source: .)
 ├── skills/
 │   ├── setup/SKILL.md                # onboarding + auth
 │   ├── send-mail/SKILL.md            # send transactional email
@@ -41,7 +42,7 @@ Public repository: <https://github.com/blindrelay-app/agent-plugin>
 
 Install that repository from the plugin or connector UI. The same package works in Claude, ChatGPT, Cursor, and other Agent Plugins 1.0 hosts. Enable **one** server.
 
-Example (Cursor): in chat run `/add-plugin https://github.com/blindrelay-app/agent-plugin`, then Install **blindrelay** in Customize. It does not appear in Cursor Marketplace search until it is listed there.
+Example (Cursor): in chat run `/add-plugin https://github.com/blindrelay-app/agent-plugin`, then Install **blindrelay** in Customize. The same URL also works as **Add Marketplace** because `.cursor-plugin/marketplace.json` points at this repo (`source: "."`). It does not appear in Cursor Marketplace search until it is listed there.
 
 ## Configure auth (one time)
 
