@@ -18,7 +18,13 @@ agent-plugin/
 ├── .cursor-plugin/                   # Cursor-optimized layer (optional, single-click auth)
 │   ├── plugin.json                   #   Cursor manifest + variables (BLINDRELAY_API_KEY)
 │   ├── mcp.json                      #   Fixed OAuth + PAT URLs; PAT header uses ${BLINDRELAY_API_KEY}
-│   └── marketplace.json              #   Same repo as a one-plugin marketplace (source: .)
+│   └── marketplace.json              #   One-plugin marketplace; source is the blindrelay/ directory
+├── blindrelay/                       # Cursor marketplace plugin (sparse-checkout root)
+│   ├── .cursor-plugin/
+│   │   ├── plugin.json
+│   │   └── mcp.json
+│   ├── skills/                       # same files as ../skills
+│   └── references/                   # same files as ../references
 ├── skills/
 │   ├── setup/SKILL.md                # onboarding + auth
 │   ├── send-mail/SKILL.md            # send transactional email
@@ -36,13 +42,15 @@ agent-plugin/
 
 The root `plugin.json` + `mcp.json` are the **portable** Agent Plugins 1.0 entry (works in every compatible client). The `.cursor-plugin/` directory is a **Cursor-only** layer that lets Cursor users set the API key once via a dashboard variable instead of editing MCP headers by hand. Non-Cursor clients ignore `.cursor-plugin/` and use the portable manifest. Cursor users: if your client lists the plugin twice, prefer the `.cursor-plugin/` entry and ignore the root one.
 
+Cursor's marketplace indexer only lists a plugin when `source` is a directory inside the repo. `source: "."` registers the marketplace and then draws no plugin under Personal. `blindrelay/` is that directory: the same skills and references as the repo root, plus the Cursor manifest. Cursor sparse-checkouts only that directory, so the files have to live there, not behind a symlink to the root.
+
 ## Install
 
 Public repository: <https://github.com/blindrelay-app/agent-plugin>
 
 Install that repository from the plugin or connector UI. The same package works in Claude, ChatGPT, Cursor, and other Agent Plugins 1.0 hosts. Enable **one** server.
 
-Example (Cursor): in chat run `/add-plugin https://github.com/blindrelay-app/agent-plugin`, then Install **blindrelay** in Customize. The same URL also works as **Add Marketplace** because `.cursor-plugin/marketplace.json` points at this repo (`source: "."`). It does not appear in Cursor Marketplace search until it is listed there.
+Example (Cursor): in chat run `/add-plugin https://github.com/blindrelay-app/agent-plugin`, then Install **blindrelay** in Customize. The same URL works as **Add Marketplace** (scope User). Cursor indexes `blindrelay/` from `.cursor-plugin/marketplace.json` and lists that plugin under Personal. It does not appear in Cursor Marketplace search until it is listed there.
 
 ## Configure auth (one time)
 

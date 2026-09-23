@@ -1,0 +1,38 @@
+{
+  "name": "blindrelay",
+  "version": "1.0.0",
+  "author": {
+    "name": "Blindrelay",
+    "email": "info@blindrelay.app",
+    "url": "https://blindrelay.app"
+  },
+  "homepage": "https://blindrelay.app/docs/mcp",
+  "repository": "https://github.com/blindrelay-app/agent-plugin",
+  "license": "MIT",
+  "keywords": [
+    "email",
+    "transactional-email",
+    "mcp",
+    "send-mail",
+    "dkim",
+    "dmarc",
+    "spf",
+    "otlp",
+    "observability",
+    "gdpr",
+    "eu",
+    "zero-content"
+  ],
+  "mcpServers": ".cursor-plugin/mcp.json",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "BLINDRELAY_API_KEY": {
+        "type": "string",
+        "title": "Blindrelay API key (PAT, optional)",
+        "description": "Optional. Only for the PAT server (api-pat). Leave empty and enable the OAuth `blindrelay` server for Connect. Same `br_…` keys as the Keys UI. Never both servers at once with an empty key.",
+        "default": ""
+      }
+    }
+  }
+}
