@@ -1,7 +1,6 @@
 {
   "name": "blindrelay",
   "version": "1.0.0",
-  "description": "Send transactional email and manage sending domains, OTLP observability, and suppression via Blindrelay — a zero-content EU email relay. Cursor-optimized entry: set BLINDRELAY_API_KEY once under Plugins → Configure; no manual header editing.",
   "author": {
     "name": "Blindrelay",
     "email": "info@blindrelay.app",
