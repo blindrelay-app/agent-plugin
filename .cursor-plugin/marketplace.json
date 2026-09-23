@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "blindrelay",
-      "source": "."
+      "source": "blindrelay"
     }
   ]
 }
