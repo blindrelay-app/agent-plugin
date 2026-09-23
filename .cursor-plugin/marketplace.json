@@ -9,8 +9,7 @@
   "plugins": [
     {
       "name": "blindrelay",
-      "source": ".",
-      "description": "Send transactional email and manage sending domains, OTLP observability, and suppression via Blindrelay."
+      "source": "."
     }
   ]
 }
