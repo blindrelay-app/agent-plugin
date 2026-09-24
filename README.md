@@ -4,7 +4,7 @@
 
 This is a portable [Agent Plugins 1.0](https://agent-plugins.org) package. It bundles:
 
-- **Two MCP servers** (`blindrelay` OAuth on `api.*`, `blindrelay-pat` on `api-pat.*`) plus five Agent Skills. Enable **one** server.
+- **Two MCP servers** (`blindrelay-with-oauth` OAuth on `api.*`, `blindrelay-with-api-key` on `api-pat.*`) plus five Agent Skills. Enable **one** server.
 - **Five Agent Skills** that teach an agent *when* and *how* to use those tools, and the no-content-on-disk invariant that must be honored on every send.
 
 Blindrelay is a **zero-content EU email relay**: message body, subject, and headers live in process RAM only until delivery; the recipient address is stored as a bcrypt hash. See [`references/no-content-on-disk.md`](references/no-content-on-disk.md).
@@ -54,7 +54,7 @@ Example (Cursor): in chat run `/add-plugin https://github.com/blindrelay-app/age
 
 ## Configure auth (one time)
 
-Agent Plugins 1.0 does not let a plugin carry secrets, so the API key is client-managed. Enable **one** server in every client: OAuth `blindrelay` (Connect, no header) or PAT `blindrelay-pat` (same `br_…` key as the Keys UI).
+Agent Plugins 1.0 does not let a plugin carry secrets, so the API key is client-managed. Enable **one** server in every client: OAuth `blindrelay` (Connect, no header) or PAT `blindrelay-with-api-key` (same `br_…` key as the Keys UI).
 
 ### Example: Cursor
 
@@ -62,13 +62,13 @@ The `.cursor-plugin/` layer declares one dashboard variable. Set it once under *
 
 | Variable | Required | Purpose |
 |----------|----------|---------|
-| `BLINDRELAY_API_KEY` | no | Optional PAT for `blindrelay-pat` only. Leave empty if using OAuth Connect. |
+| `BLINDRELAY_API_KEY` | no | Optional PAT for `blindrelay-with-api-key` only. Leave empty if using OAuth Connect. |
 
 The two endpoint URLs are fixed in the plugin (`https://api.blindrelay.app/mcp` and `https://api-pat.blindrelay.app/mcp`). They are not settings. Cursor substitutes `${BLINDRELAY_API_KEY}` into the PAT server's `Authorization: Bearer …` header. No manual header editing.
 
 ### Claude, ChatGPT, and other clients
 
-1. Enable `blindrelay` and Connect (no API key), or enable `blindrelay-pat` and set `Authorization: Bearer br_…` on `https://api-pat.blindrelay.app/mcp`.
+1. Enable `blindrelay` and Connect (no API key), or enable `blindrelay-with-api-key` and set `Authorization: Bearer br_…` on `https://api-pat.blindrelay.app/mcp`.
 2. A PAT is a scoped key from <https://blindrelay.app/keys> (reveal once). `send` is enough on Free; `read` and `write` need Starter or higher.
 3. Verify by calling `usage` (needs `read`) or `domains_list` (needs `read`). A 401 means the key/header is missing; a 403 `scope_missing` means the key lacks the scope.
 

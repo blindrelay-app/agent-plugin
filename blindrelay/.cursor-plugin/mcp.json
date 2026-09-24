@@ -1,10 +1,10 @@
 {
   "mcpServers": {
-    "blindrelay": {
+    "blindrelay-with-oauth": {
       "type": "streamable-http",
       "url": "https://api.blindrelay.app/mcp"
     },
-    "blindrelay-pat": {
+    "blindrelay-with-api-key": {
       "type": "streamable-http",
       "url": "https://api-pat.blindrelay.app/mcp",
       "headers": {

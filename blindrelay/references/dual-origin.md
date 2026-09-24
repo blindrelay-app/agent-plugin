@@ -4,8 +4,8 @@ Some MCP hosts cannot mix OAuth discovery and a static Bearer PAT on the **same 
 
 | Server entry | URL | Auth |
 |--------------|-----|------|
-| `blindrelay` | `https://api.blindrelay.app/mcp` | MCP OAuth (RFC 9728). No `Authorization` header in the plugin. |
-| `blindrelay-pat` | `https://api-pat.blindrelay.app/mcp` | Same scoped `br_…` API keys as CLI / Keys UI. Optional `Authorization: Bearer`. |
+| `blindrelay-with-oauth` | `https://api.blindrelay.app/mcp` | MCP OAuth (RFC 9728). No `Authorization` header in the plugin. |
+| `blindrelay-with-api-key` | `https://api-pat.blindrelay.app/mcp` | Same scoped `br_…` API keys as CLI / Keys UI. Optional `Authorization: Bearer`. |
 
 Staging: `https://api.stag.blindrelay.app/mcp` and `https://api-pat.stag.blindrelay.app/mcp`.
 
