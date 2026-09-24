@@ -1,11 +1,11 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
   "mcpServers": {
-    "blindrelay": {
+    "blindrelay-with-oauth": {
       "type": "streamable-http",
       "url": "https://api.blindrelay.app/mcp"
     },
-    "blindrelay-pat": {
+    "blindrelay-with-api-key": {
       "type": "streamable-http",
       "url": "https://api-pat.blindrelay.app/mcp"
     }

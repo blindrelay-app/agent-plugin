@@ -12,7 +12,7 @@ Use this skill the first time the user wants to use Blindrelay through the agent
 Two Streamable HTTP servers (enable **one**):
 
 - `blindrelay` → `https://api.blindrelay.app/mcp` — MCP OAuth. No Authorization header. Signup or existing session.
-- `blindrelay-pat` → `https://api-pat.blindrelay.app/mcp` — same `br_…` keys as the Keys UI.
+- `blindrelay-with-api-key` → `https://api-pat.blindrelay.app/mcp` — same `br_…` keys as the Keys UI.
 
 Tools match the CLI: `send`, `domains_*`, `dedicated_ip_*`, `inbound_forward_*`, `usage`, `usage_history`, `delivery_stats`, `suppression_*`, `audit_list`, `otlp_*`, `delivery_settings_*`. Scopes: `send`, `read`, `write`.
 
@@ -24,8 +24,8 @@ If Blindrelay is not installed yet, add <https://github.com/blindrelay-app/agent
 
 ## The one-time setup (auth)
 
-1. **Prefer OAuth.** Enable only `blindrelay`. Complete Connect in the browser (same-tab email OTP if the user is new). No MCP tokens until the email is verified.
-2. **PAT (optional).** Create a key at <https://blindrelay.app/keys>. Enable only `blindrelay-pat`. Set `Authorization: Bearer br_…` on the PAT URL. Cursor example: Plugins → Configure, paste `BLINDRELAY_API_KEY` (default empty).
+1. **Prefer OAuth.** Enable only `blindrelay-with-oauth`. Complete Connect in the browser (same-tab email OTP if the user is new). No MCP tokens until the email is verified.
+2. **PAT (optional).** Create a key at <https://blindrelay.app/keys>. Enable only `blindrelay-with-api-key`. Set `Authorization: Bearer br_…` on the PAT URL. Cursor example: Plugins → Configure, paste `BLINDRELAY_API_KEY` (default empty).
 3. **Never paste the API key into a file the agent writes to disk inside this repo.**
 
 ## Verify

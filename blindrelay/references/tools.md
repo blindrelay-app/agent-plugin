@@ -1,6 +1,6 @@
 # Blindrelay MCP tool reference
 
-The `blindrelay` MCP server exposes the same operations as the Blindrelay CLI over `/v1/*`. **Plugin first.** OAuth host: `https://api.blindrelay.app/mcp`. PAT host: `https://api-pat.blindrelay.app/mcp` with `Authorization: Bearer <api_key>`. Scopes: `send`, `read`, `write` (Free = `send` only).
+The Blindrelay MCP servers expose the same operations as the Blindrelay CLI over `/v1/*`. **Plugin first.** OAuth host: `https://api.blindrelay.app/mcp`. PAT host: `https://api-pat.blindrelay.app/mcp` with `Authorization: Bearer <api_key>`. Scopes: `send`, `read`, `write` (Free = `send` only).
 
 ## send
 

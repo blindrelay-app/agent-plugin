@@ -1,6 +1,8 @@
 {
   "name": "blindrelay",
+  "displayName": "Blindrelay",
   "version": "1.0.0",
+  "logo": "assets/logo.svg",
   "author": {
     "name": "Blindrelay",
     "email": "info@blindrelay.app",
@@ -30,7 +32,7 @@
       "BLINDRELAY_API_KEY": {
         "type": "string",
         "title": "Blindrelay API key (PAT, optional)",
-        "description": "Optional. Only for the PAT server (api-pat). Leave empty and enable the OAuth `blindrelay` server for Connect. Same `br_…` keys as the Keys UI. Never both servers at once with an empty key.",
+        "description": "Optional. Only for the PAT server (api-pat). Leave empty and enable the OAuth `blindrelay-with-oauth` server for Connect. Same `br_…` keys as the Keys UI. Never both servers at once with an empty key.",
         "default": ""
       }
     }

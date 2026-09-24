@@ -5,7 +5,7 @@ description: Send a transactional email through Blindrelay using the send MCP to
 
 # Send transactional email
 
-Use the `send` MCP tool (exposed by the `blindrelay` MCP server). Required scope: `send` (Free plan OK).
+Use the `send` MCP tool (exposed by the Blindrelay MCP servers). Required scope: `send` (Free plan OK).
 
 ## Preconditions
 
