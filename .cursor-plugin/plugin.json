@@ -1,12 +1,12 @@
 {
   "name": "blindrelay",
   "displayName": "Blindrelay",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "description": "Send transactional email and manage domains, DKIM, and delivery observability.",
   "logo": "assets/logo.svg",
   "author": {
     "name": "Blindrelay",
-    "email": "info@blindrelay.app",
-    "url": "https://blindrelay.app"
+    "email": "info@blindrelay.app"
   },
   "homepage": "https://blindrelay.app/docs/mcp",
   "repository": "https://github.com/blindrelay-app/agent-plugin",

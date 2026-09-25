@@ -4,12 +4,14 @@
     "name": "Blindrelay"
   },
   "metadata": {
-    "description": "Blindrelay Agent Plugin"
+    "description": "Blindrelay Agent Plugin",
+    "version": "1.0.1"
   },
   "plugins": [
     {
       "name": "blindrelay",
-      "source": "blindrelay"
+      "source": "blindrelay",
+      "description": "Send transactional email and manage domains, DKIM, and delivery observability."
     }
   ]
 }
