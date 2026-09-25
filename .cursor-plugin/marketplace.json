@@ -9,7 +9,8 @@
   "plugins": [
     {
       "name": "blindrelay",
-      "source": "blindrelay"
+      "source": "blindrelay",
+      "description": "Send transactional email and manage domains, DKIM, and delivery observability."
     }
   ]
 }
