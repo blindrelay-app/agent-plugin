@@ -1,0 +1,39 @@
+{
+  "name": "blindrelay",
+  "displayName": "Blindrelay",
+  "version": "1.0.1",
+  "description": "Send transactional email and manage domains, DKIM, and delivery observability.",
+  "author": {
+    "name": "Blindrelay",
+    "email": "info@blindrelay.app",
+    "url": "https://blindrelay.app"
+  },
+  "homepage": "https://blindrelay.app/docs/mcp",
+  "repository": "https://github.com/blindrelay-app/agent-plugin",
+  "license": "MIT",
+  "keywords": [
+    "email",
+    "transactional-email",
+    "mcp",
+    "send-mail",
+    "dkim",
+    "dmarc",
+    "spf",
+    "otlp",
+    "observability",
+    "gdpr",
+    "eu",
+    "zero-content"
+  ],
+  "mcpServers": "./.claude-plugin/mcp.json",
+  "userConfig": {
+    "BLINDRELAY_API_KEY": {
+      "type": "string",
+      "title": "Blindrelay API key (PAT, optional)",
+      "description": "Optional. Only for the PAT server (api-pat). Leave empty and use the OAuth server for Connect. Same br_… keys as the Keys UI. Enable one server.",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    }
+  }
+}

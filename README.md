@@ -19,10 +19,15 @@ agent-plugin/
 │   ├── plugin.json                   #   Cursor manifest + variables (BLINDRELAY_API_KEY)
 │   ├── mcp.json                      #   Fixed OAuth + PAT URLs; PAT header uses ${BLINDRELAY_API_KEY}
 │   └── marketplace.json              #   One-plugin marketplace; source is the blindrelay/ directory
-├── blindrelay/                       # Cursor marketplace plugin (sparse-checkout root)
+├── .claude-plugin/
+│   └── marketplace.json              #   Claude marketplace catalog; source is ./blindrelay
+├── blindrelay/                       # Marketplace plugin directory (Cursor sparse-checkout root)
 │   ├── .cursor-plugin/
 │   │   ├── plugin.json
 │   │   └── mcp.json
+│   ├── .claude-plugin/
+│   │   ├── plugin.json               #   Claude manifest + optional PAT userConfig
+│   │   └── mcp.json                  #   PAT header uses ${user_config.BLINDRELAY_API_KEY}
 │   ├── skills/                       # same files as ../skills
 │   └── references/                   # same files as ../references
 ├── skills/
@@ -51,6 +56,8 @@ Public repository: <https://github.com/blindrelay-app/agent-plugin>
 Install that repository from the plugin or connector UI. The same package works in Claude, ChatGPT, Cursor, and other Agent Plugins 1.0 hosts. Enable **one** server.
 
 Example (Cursor): in chat run `/add-plugin https://github.com/blindrelay-app/agent-plugin`, then Install **blindrelay** in Customize. The same URL works as **Add Marketplace** (scope User). Cursor indexes `blindrelay/` from `.cursor-plugin/marketplace.json` and lists that plugin under Personal. It does not appear in Cursor Marketplace search until it is listed there.
+
+Example (Claude): Add Marketplace with `https://github.com/blindrelay-app/agent-plugin`. Claude reads `.claude-plugin/marketplace.json` and installs `./blindrelay`. The optional PAT is `BLINDRELAY_API_KEY` in the plugin's user config. Enable **one** server.
 
 ## Configure auth (one time)
 
