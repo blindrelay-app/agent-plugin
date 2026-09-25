@@ -1,7 +1,7 @@
 {
   "name": "blindrelay",
   "displayName": "Blindrelay",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Send transactional email and manage domains, DKIM, and delivery observability.",
   "logo": "assets/logo.svg",
   "author": {
