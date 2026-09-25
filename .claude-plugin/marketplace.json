@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "blindrelay",
+  "description": "Blindrelay Agent Plugin",
+  "version": "1.0.1",
+  "owner": {
+    "name": "Blindrelay",
+    "email": "info@blindrelay.app",
+    "url": "https://blindrelay.app"
+  },
+  "plugins": [
+    {
+      "name": "blindrelay",
+      "source": "./blindrelay",
+      "description": "Send transactional email and manage domains, DKIM, and delivery observability.",
+      "version": "1.0.1",
+      "author": {
+        "name": "Blindrelay",
+        "email": "info@blindrelay.app",
+        "url": "https://blindrelay.app"
+      }
+    }
+  ]
+}
