@@ -11,7 +11,7 @@ Use this skill the first time the user wants to use Blindrelay through the agent
 
 Two Streamable HTTP servers (enable **one**):
 
-- `blindrelay` → `https://api.blindrelay.app/mcp` — MCP OAuth. No Authorization header. Signup or existing session.
+- `blindrelay-with-oauth` → `https://api.blindrelay.app/mcp` — MCP OAuth. No Authorization header. Signup or existing session.
 - `blindrelay-with-api-key` → `https://api-pat.blindrelay.app/mcp` — same `br_…` keys as the Keys UI.
 
 Tools match the CLI: `send`, `domains_*`, `dedicated_ip_*`, `inbound_forward_*`, `usage`, `usage_history`, `delivery_stats`, `suppression_*`, `audit_list`, `otlp_*`, `delivery_settings_*`. Scopes: `send`, `read`, `write`.

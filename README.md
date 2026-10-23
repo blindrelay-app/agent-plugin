@@ -61,7 +61,7 @@ Example (Claude): Add Marketplace with `https://github.com/blindrelay-app/agent-
 
 ## Configure auth (one time)
 
-Agent Plugins 1.0 does not let a plugin carry secrets, so the API key is client-managed. Enable **one** server in every client: OAuth `blindrelay` (Connect, no header) or PAT `blindrelay-with-api-key` (same `br_…` key as the Keys UI).
+Agent Plugins 1.0 does not let a plugin carry secrets, so the API key is client-managed. Enable **one** server in every client: OAuth `blindrelay-with-oauth` (Connect, no header) or PAT `blindrelay-with-api-key` (same `br_…` key as the Keys UI).
 
 ### Example: Cursor
 
@@ -75,7 +75,7 @@ The two endpoint URLs are fixed in the plugin (`https://api.blindrelay.app/mcp` 
 
 ### Claude, ChatGPT, and other clients
 
-1. Enable `blindrelay` and Connect (no API key), or enable `blindrelay-with-api-key` and set `Authorization: Bearer br_…` on `https://api-pat.blindrelay.app/mcp`.
+1. Enable `blindrelay-with-oauth` and Connect (no API key), or enable `blindrelay-with-api-key` and set `Authorization: Bearer br_…` on `https://api-pat.blindrelay.app/mcp`.
 2. A PAT is a scoped key from <https://blindrelay.app/keys> (reveal once). `send` is enough on Free; `read` and `write` need Starter or higher.
 3. Verify by calling `usage` (needs `read`) or `domains_list` (needs `read`). A 401 means the key/header is missing; a 403 `scope_missing` means the key lacks the scope.
 
@@ -101,7 +101,7 @@ The skills activate automatically based on intent. The agent will never log a re
 
 ## Validation
 
-The package is checked on every MR by the `blindrelay_agent_plugin_lint_job` CI job (`scripts/validate-agent-plugin.py`): manifest closed-schema, MCP transport validity, no embedded secrets, Cursor `${VAR}` placeholders all declared in `variables`, skill frontmatter + name/dir match, and internal markdown links. Run it locally:
+The package is checked on every MR by the `blindrelay_agent_plugin_lint_job` CI job (`scripts/validate-agent-plugin.py`): manifest closed-schema, MCP transport validity, no embedded secrets, Cursor `${VAR}` placeholders all declared in `variables`, Cursor `author` limited to `name` and `email`, Claude marketplace `source` starting with `./` plus the nested `.claude-plugin` manifest and MCP config, skill frontmatter + name/dir match, and internal markdown links. Run it locally:
 
 ```bash
 just agent-plugin-lint        # or: python3 scripts/validate-agent-plugin.py
