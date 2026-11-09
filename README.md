@@ -7,7 +7,7 @@ This is a portable [Agent Plugins 1.0](https://agent-plugins.org) package. It bu
 - **Two MCP servers** (`blindrelay-with-oauth` OAuth on `api.*`, `blindrelay-with-api-key` on `api-pat.*`) plus five Agent Skills. Enable **one** server.
 - **Five Agent Skills** that teach an agent *when* and *how* to use those tools, and the no-content-on-disk invariant that must be honored on every send.
 
-Blindrelay is a **zero-content EU email relay**: message body, subject, and headers live in process RAM only until delivery; the recipient address is stored as a bcrypt hash. See [`references/no-content-on-disk.md`](references/no-content-on-disk.md).
+Blindrelay is a **zero-content EU email relay**: message body, subject, and headers live in process RAM only until delivery (a deferred message waits on the relay disk for up to 24h unless retries are off); the recipient address is stored as a bcrypt hash. See [`references/no-content-on-disk.md`](references/no-content-on-disk.md).
 
 ## Layout
 
@@ -57,7 +57,14 @@ Install that repository from the plugin or connector UI. The same package works 
 
 Example (Cursor): in chat run `/add-plugin https://github.com/blindrelay-app/agent-plugin`, then Install **blindrelay** in Customize. The same URL works as **Add Marketplace** (scope User). Cursor indexes `blindrelay/` from `.cursor-plugin/marketplace.json` and lists that plugin under Personal. It does not appear in Cursor Marketplace search until it is listed there.
 
-Example (Claude): Add Marketplace with `https://github.com/blindrelay-app/agent-plugin`. Claude reads `.claude-plugin/marketplace.json` and installs `./blindrelay`. The optional PAT is `BLINDRELAY_API_KEY` in the plugin's user config. Enable **one** server.
+Example (Claude Code):
+
+```bash
+claude plugin marketplace add blindrelay-app/agent-plugin
+claude plugin install blindrelay@blindrelay
+```
+
+Then run `/mcp` in Claude and sign in. In the Claude desktop app, Add Marketplace takes the same `https://github.com/blindrelay-app/agent-plugin`. Claude reads `.claude-plugin/marketplace.json` and installs `./blindrelay`. The optional PAT is `BLINDRELAY_API_KEY` in the plugin's user config. Enable **one** server.
 
 ## Configure auth (one time)
 
@@ -76,7 +83,7 @@ The two endpoint URLs are fixed in the plugin (`https://api.blindrelay.app/mcp` 
 ### Claude, ChatGPT, and other clients
 
 1. Enable `blindrelay-with-oauth` and Connect (no API key), or enable `blindrelay-with-api-key` and set `Authorization: Bearer br_…` on `https://api-pat.blindrelay.app/mcp`.
-2. A PAT is a scoped key from <https://blindrelay.app/keys> (reveal once). `send` is enough on Free; `read` and `write` need Starter or higher.
+2. A PAT is a scoped key from <https://blindrelay.app/keys> (reveal once). `send` is enough on Free; `read` and `write` need Mini or higher.
 3. Verify by calling `usage` (needs `read`) or `domains_list` (needs `read`). A 401 means the key/header is missing; a 403 `scope_missing` means the key lacks the scope.
 
 ## Use
@@ -95,7 +102,7 @@ The skills activate automatically based on intent. The agent will never log a re
 
 ## Safety properties
 
-- **No content on disk.** Body/subject/headers are RAM-only; recipient is a bcrypt hash. Enforced by `backend/tests/no_content_on_disk.rs` on every release. The skills reinforce this on the agent side.
+- **No content on disk.** Body/subject/headers are RAM-only, apart from the deferred-mail spool described in `references/no-content-on-disk.md`; recipient is a bcrypt hash. Enforced by `backend/tests/no_content_on_disk.rs` on every release. The skills reinforce this on the agent side.
 - **No secrets in the plugin.** The API key never ships in `mcp.json` headers; it lives in your client's secret store (Cursor dashboard variable, or your client's MCP auth settings).
 - **Customer-owned observability.** Delivery events go to *your* OTLP endpoint and/or delivery webhook — your Grafana / Datadog / Honeycomb is the system of record.
 
