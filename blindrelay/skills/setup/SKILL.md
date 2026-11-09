@@ -14,7 +14,7 @@ Two Streamable HTTP servers (enable **one**):
 - `blindrelay-with-oauth` → `https://api.blindrelay.app/mcp` — MCP OAuth. No Authorization header. Signup or existing session.
 - `blindrelay-with-api-key` → `https://api-pat.blindrelay.app/mcp` — same `br_…` keys as the Keys UI.
 
-Tools match the CLI: `send`, `domains_*`, `dedicated_ip_*`, `inbound_forward_*`, `usage`, `usage_history`, `delivery_stats`, `suppression_*`, `audit_list`, `otlp_*`, `delivery_settings_*`. Scopes: `send`, `read`, `write`.
+Tools match the CLI: `setup_status`, `send`, `email_status`, `email_list`, `domains_*`, `dedicated_ip_*`, `inbound_forward_*`, `inbound_endpoint_*`, `usage`, `usage_history`, `delivery_stats`, `suppression_*`, `audit_list`, `otlp_*`, `delivery_settings_*`. Scopes: `send`, `read`, `write`.
 
 Never enable both servers with an empty PAT. Unexpanded `Bearer ${BLINDRELAY_API_KEY}` is ignored. Do not put a PAT on `api.*`. See [dual-origin.md](../../references/dual-origin.md).
 
@@ -34,6 +34,21 @@ If Blindrelay is not installed yet, add <https://github.com/blindrelay-app/agent
 - `send`-only: do not send a real email just to test.
 - `401` on PAT with empty key: switch to OAuth or set the key.
 - `401` + `WWW-Authenticate` on `api.*` with a `br_…` key: you are on the OAuth host — use `api-pat` or Connect.
+
+## Guided setup (resumable)
+
+Once connected, call `setup_status` and walk the user through the first step that is not done. Call it again after each step: it picks up wherever the workspace stands, so a new conversation resumes where the last one stopped.
+
+1. **`domain_registered`** — ask which domain they send from, then `domains_add`.
+2. **`dns_published`** — `domains_dns_guide` gives the records to publish; show `pending_records` (type, host, last check message). The user publishes them at their DNS provider.
+3. **`domain_verified`** — `domains_verify` once they say the records are in. If it is still pending, show the remaining `pending_records` and wait; DNS can take a while. Never claim the domain is verified when `done` is false.
+4. **`test_send`** — only with the user's explicit consent: ask for a recipient address they own, confirm the from address, then `send` once. Follow up with `email_status`.
+
+When a step is blocked, say why from `blocked_reason`:
+
+- `plan_restricted` — Free keys are `send`-only; register and verify the domain at the `next_action.ui_url` (dashboard) or upgrade.
+- `scope_missing` — the key lacks the scopes in `missing_scopes`; create a key with them at <https://blindrelay.app/keys> or use OAuth Connect.
+- `quota_exceeded` — the monthly quota is used up.
 
 ## After setup
 
