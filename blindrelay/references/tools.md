@@ -73,7 +73,7 @@ See [manage-domains](../skills/manage-domains/SKILL.md).
 
 | Tool | Scope | Args | Returns |
 |------|-------|------|---------|
-| `dedicated_ip_get` | `read` | — | eligibility, `assignments[]`, `default_assignment_id`, optional `recent_closure`. `assignments[].inventory.blocklist` is null until the first check, else `{ checked_at, listed_zones, context_listed_zones, errored_zones }`: only the lists Blindrelay checks; `context_listed_zones` are informational; a zone in `errored_zones` was not checked, so it is not clean. `assignments[].warmup` is null until live, else `{ day, daily_limit, sent_today, overflowed_today, exempt }`; `daily_limit` is null when exempt or past the ramp |
+| `dedicated_ip_get` | `read` | — | eligibility, `assignments[]`, `default_assignment_id`, optional `recent_closure`. `assignments[].inventory.blocklist` is null until the first check, else `{ checked_at, listed_zones, context_listed_zones, errored_zones }`: only the lists Blindrelay checks; `context_listed_zones` are informational; a zone in `errored_zones` was not checked, so it is not clean. `assignments[].warmup` is null until live, else `{ warm, daily_limit, sent_today, overflowed_today, exempt }`; the limit follows the IP's own history and is null when warm or exempt |
 | `dedicated_ip_request` | `write` | — | assignment; `checkout_url` when self-serve |
 | `dedicated_ip_cancel` | `write` | `id` | cancelled assignment |
 | `dedicated_ip_resume_checkout` | `write` | `id` | `{ checkout_url }` |

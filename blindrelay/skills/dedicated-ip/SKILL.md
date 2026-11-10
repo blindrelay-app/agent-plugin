@@ -24,7 +24,7 @@ dedicated_ip_get  →  dedicated_ip_request  →  (open checkout_url in a browse
 5. `dedicated_ip_dismiss_closure` with `assignment_id` when `recent_closure` is present and the user has read the reason.
 6. `dedicated_ip_cancel` with `id`. Confirm first. Domains pinned to it fall back to the workspace default (or the shared pool); the domain count never blocks a cancel.
 
-During the first 21 days from activation an IP has a daily limit (`assignments[].warmup`). Mail above it uses the shared pool and counts in `overflowed_today`; a workspace over the normal abuse limits gets `warmup_limit_exceeded` instead.
+An IP has a daily limit until its own send history shows it is warm (`assignments[].warmup`). Mail above it uses the shared pool and counts in `overflowed_today`; a workspace over the normal abuse limits, or a spike past the shared IP's own limit, gets `warmup_limit_exceeded` instead (retry after midnight UTC).
 
 ## Domain pin
 
