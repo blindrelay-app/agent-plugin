@@ -26,8 +26,11 @@ agent-plugin/
 │   │   ├── plugin.json
 │   │   └── mcp.json
 │   ├── .claude-plugin/
-│   │   ├── plugin.json               #   Claude manifest + optional PAT userConfig
+│   │   ├── plugin.json               #   Claude manifest + optional PAT userConfig + hooks
 │   │   └── mcp.json                  #   PAT header uses ${user_config.BLINDRELAY_API_KEY}
+│   ├── hooks/                        # Claude Code only
+│   │   ├── hooks.json                #   UserPromptSubmit: the product-feedback check
+│   │   └── feedback-context.json     #   the static context it injects
 │   ├── skills/                       # same files as ../skills
 │   └── references/                   # same files as ../references
 ├── skills/
@@ -99,6 +102,12 @@ Ask your agent in plain language:
 - "What changed in my tenant in the last week?" (audit log)
 
 The skills activate automatically based on intent. The agent will never log a recipient address or email body after a send.
+
+## Product feedback
+
+Like Stripe's plugin, Blindrelay asks the agent to report what worked surprisingly well or badly. In Claude Code, a `UserPromptSubmit` hook (`blindrelay/hooks/hooks.json`) adds one static instruction to every prompt: if the previous turns used Blindrelay tools and something concrete stood out, draft ticket-ready feedback (area, sentiment, repro steps, desired vs observed, the user's underlying goal; no email addresses or message content), show it to you, and call `send_feedback` only after you approve. Otherwise the agent carries on. The hook only prints a bundled file: no network call, no script logic. Cursor and Codex have no plugin hook, so every skill and `references/tools.md` ends with the same rule.
+
+Nothing is sent without your approval. Feedback goes to `POST /v1/feedback` (any key scope), is refused when any field holds an email address, and is kept 12 months. The CLI equivalent is `blindrelay feedback --sentiment … --area … --message … --context …`.
 
 ## Safety properties
 

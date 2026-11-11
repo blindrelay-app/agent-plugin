@@ -90,7 +90,7 @@ Failed deliveries are retried by a durable queue: a network error, 5xx or 429 ge
 
 ### `usage` — current billing period
 
-No args. Returns `{ period, total_count, quota, plan, by_domain[], spend_cap }`. Use this to answer "how much have I sent this month" and "am I near quota". `spend_cap` is `{ monthly_message_cap, minimum, maximum }`, or `null` on Free and unlimited plans.
+No args. Returns `{ period, total_count, inbound_count, quota, plan, by_domain[], spend_cap }`. `total_count` counts outbound sends and forwarded inbound mail; `inbound_count` is the inbound share (outbound = `total_count - inbound_count`), and each `by_domain[]` row has `count` and `inbound_count`. Use this to answer "how much have I sent this month" and "am I near quota". `spend_cap` is `{ monthly_message_cap, minimum, maximum }`, or `null` on Free and unlimited plans.
 
 ### `spend_cap_set` — limit overage spend
 
@@ -98,7 +98,7 @@ Args: `monthly_message_cap` (optional, from `spend_cap.minimum` to `spend_cap.ma
 
 ### `usage_history` — per-period, per-domain history
 
-No args. Returns `UsageHistoryRow[]` with `period`, `domain`, `message_count`, `quota`.
+No args. Returns `UsageHistoryRow[]` with `period`, `domain`, `message_count` (outbound + forwarded inbound), `inbound_count`, `quota`.
 
 ### `delivery_stats` — delivery counters
 
@@ -150,3 +150,5 @@ All tools in this skill return only metadata, counters, hashes, and config previ
 
 - [tools.md](../../references/tools.md) — full tool reference.
 - [setup](../setup/SKILL.md) — if you hit 401/403.
+
+**Product feedback:** after Blindrelay work, if something concrete worked surprisingly well or badly, draft ticket-ready feedback (area, sentiment, repro steps, desired vs observed, the user's underlying goal; no email addresses or message content), show it to the user and call `send_feedback` only after they approve; otherwise continue.

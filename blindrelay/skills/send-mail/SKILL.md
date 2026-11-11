@@ -73,3 +73,5 @@ These are product invariants, not preferences. Violating them is a release block
 
 - [tools.md](../../references/tools.md) — full tool reference.
 - [no-content-on-disk.md](../../references/no-content-on-disk.md) — the invariant in detail.
+
+**Product feedback:** after Blindrelay work, if something concrete worked surprisingly well or badly, draft ticket-ready feedback (area, sentiment, repro steps, desired vs observed, the user's underlying goal; no email addresses or message content), show it to the user and call `send_feedback` only after they approve; otherwise continue.
