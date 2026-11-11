@@ -57,8 +57,8 @@ Same names as `send`; an omitted field is not checked. Returns `{ ok, error_coun
 | `domains_list` | `read` | — | `DomainSummary[]` |
 | `domains_get` | `read` | `id` | `DomainDetail` (incl. DNS records) |
 | `domains_dns_guide` | `read` | `id` | plain-text LLM prompt (`{ prompt }` on REST) |
-| `domains_dmarc` | `read` | `id` | `DmarcSummary` (setup, traffic, `readiness`); 403 `dmarc_plan_required` below Growth |
-| `domains_dmarc_sources` | `read` | `id`, `class?` (`unknown` default, `blindrelay`, `all`), `days?`, `limit?`, `offset?` | `DmarcSources`; 403 `dmarc_plan_required` below Growth |
+| `domains_dmarc` | `read` | `id` | `DmarcSummary` (setup, traffic, `readiness`); 403 `dmarc_plan_required` on Free |
+| `domains_dmarc_sources` | `read` | `id`, `class?` (`unknown` default, `blindrelay`, `all`), `days?`, `limit?`, `offset?` | `DmarcSources`; 403 `dmarc_plan_required` on Free |
 | `domains_add` | `write` | `domain`, `selector?`, `dedicated_ip_assignment_id?` | `DomainDetail`; 403 `domain_limit_reached` once the workspace holds its plan's total domain count (Free 1; paid plans unlimited, fair use), shared and dedicated-IP domains alike |
 | `domains_verify` | `write` | `id` | `DomainSummary` |
 | `domains_rotate_dkim` | `write` | `id`, `selector?` | rotation result + new DKIM record |
@@ -73,7 +73,7 @@ See [manage-domains](../skills/manage-domains/SKILL.md).
 
 | Tool | Scope | Args | Returns |
 |------|-------|------|---------|
-| `dedicated_ip_get` | `read` | — | eligibility, `assignments[]`, `default_assignment_id`, optional `recent_closure`. `assignments[].inventory.blocklist` is null until the first check, else `{ checked_at, listed_zones, context_listed_zones, errored_zones }`: only the lists Blindrelay checks; `context_listed_zones` are informational; a zone in `errored_zones` was not checked, so it is not clean. `assignments[].warmup` is null until live, else `{ day, daily_limit, sent_today, overflowed_today, exempt }`; `daily_limit` is null when exempt or past the ramp |
+| `dedicated_ip_get` | `read` | — | eligibility, `assignments[]`, `default_assignment_id`, optional `recent_closure`. `assignments[].inventory.blocklist` is null until the first check, else `{ checked_at, listed_zones, context_listed_zones, errored_zones }`: only the lists Blindrelay checks; `context_listed_zones` are informational; a zone in `errored_zones` was not checked, so it is not clean. `assignments[].warmup` is null until live, else `{ warm, daily_limit, sent_today, overflowed_today, exempt }`; the limit follows the IP's own history and is null when warm or exempt |
 | `dedicated_ip_request` | `write` | — | assignment; `checkout_url` when self-serve |
 | `dedicated_ip_cancel` | `write` | `id` | cancelled assignment |
 | `dedicated_ip_resume_checkout` | `write` | `id` | `{ checkout_url }` |
@@ -88,8 +88,8 @@ Requires an **active** dedicated IP.
 
 | Tool | Scope | Args | Returns |
 |------|-------|------|---------|
-| `inbound_forward_get` | `read` | — | `{ eligible, mx_host, max_aliases, aliases[], max_endpoints, endpoints[] }` |
-| `inbound_forward_add` | `write` | `domain_id`, `local_part`, `destination` (mailbox) **or** `endpoint_id` | alias (`destination_kind`, `destination`, `endpoint_id`) |
+| `inbound_forward_get` | `read` | — | `{ eligible, mailbox_eligible, mx_host, max_aliases, aliases[], max_endpoints, endpoints[] }`; `eligible` = paid plan, `mailbox_eligible` = also an active dedicated IP |
+| `inbound_forward_add` | `write` | `domain_id`, `local_part`, `destination` (mailbox) **or** `endpoint_id` | alias (`destination_kind`, `destination`, `endpoint_id`); 403 `paid_plan_required` on Free, `inbound_forward_dedicated_ip_required` for a mailbox without an active IP |
 | `inbound_forward_update` | `write` | `id`, `destination?` or `endpoint_id?`, `enabled?` | alias |
 | `inbound_forward_remove` | `write` | `id` | `{"ok":true}` |
 | `inbound_endpoint_list` | `read` | — | `{ max_endpoints, endpoints[] }` (no secrets; `diagnostics` per endpoint) |
@@ -105,8 +105,8 @@ Endpoint deliveries are a signed `POST` of the raw message (`message/rfc822`, `B
 
 | Tool | Scope | Args | Returns |
 |------|-------|------|---------|
-| `usage` | `read` | — | `{ period, total_count, quota, plan, by_domain[], spend_cap }`; `spend_cap` is `{ monthly_message_cap, minimum, maximum }`, `null` on Free and unlimited plans |
-| `usage_history` | `read` | — | `UsageHistoryRow[]` |
+| `usage` | `read` | — | `{ period, total_count, inbound_count, quota, plan, by_domain[], spend_cap }`; `total_count` includes forwarded inbound mail, `inbound_count` is its share (also per `by_domain[]` row); `spend_cap` is `{ monthly_message_cap, minimum, maximum }`, `null` on Free and unlimited plans |
+| `usage_history` | `read` | — | `UsageHistoryRow[]` (`period`, `domain`, `message_count`, `inbound_count`, `quota`) |
 | `spend_cap_set` | `write` | `monthly_message_cap?` (from `spend_cap.minimum` to `spend_cap.maximum`; omit or null removes it) | `{ monthly_message_cap, minimum, maximum }`; `plan_restricted` on Free and unlimited plans; `admin_required` when the key's creator is not an owner or admin |
 | `delivery_stats` | `read` | `period_hours?`, `domain?`, `egress_key?` | `{ pending, relay_accepted, delivered, failed, failed_breakdown, retention_hours, period_hours, domain?, egress_key?, series_resolution, series[], egress_keys[] }` |
 | `email_status` | `send` or `read` | `id` (from `send`) | `{ id, status, summary, final, accepted_at, updated_at, lookup_window_hours, sandbox }` — `sandbox` true for a sandbox API key, which delivers nothing; status names match the delivery webhook events; lookup by id only, no recipient or content; `404 email_not_found` when unknown or older than the window; rate limited per workspace |
@@ -127,6 +127,14 @@ Endpoint deliveries are a signed `POST` of the raw message (`message/rfc822`, `B
 | Tool | Scope | Args | Returns |
 |------|-------|------|---------|
 | `audit_list` | `read` | `page?`, `page_size?` | `{ entries[], total, page, page_size, retention_days? }` (no message content) |
+
+## feedback
+
+| Tool | Scope | Args | Returns |
+|------|-------|------|---------|
+| `send_feedback` | any | `sentiment` (`positive`, `neutral`, `negative`), `area` (`sending`, `domains`, `dmarc`, `inbound`, `dedicated_ip`, `billing`, `cli`, `agent_plugin`, `docs`, `other`), `message` and `context` (20 to 2000 characters each), `actor?` (`agent` default, `human`) | `{ id, created_at }` — `POST /v1/feedback`, read by the Blindrelay team. `400 contains_email_address` names the field when any text holds an address (never echoed); `400 invalid_payload` for other values; `429 rate_limited` with `retry_after_secs` (per workspace, hourly). Kept 12 months |
+
+Call `send_feedback` only after the user approved the exact draft.
 
 ## OTLP export
 
@@ -166,3 +174,5 @@ An API refusal comes back as a tool error whose text is the REST envelope plus t
 | `email_not_found` | no | Message id unknown in this workspace or older than `lookup_window_hours` |
 | `tenant_suspended` | no | Tenant is suspended |
 | `unauthorized` | no | Missing/invalid API key |
+
+**Product feedback:** after Blindrelay work, if something concrete worked surprisingly well or badly, draft ticket-ready feedback (area, sentiment, repro steps, desired vs observed, the user's underlying goal; no email addresses or message content), show it to the user and call `send_feedback` only after they approve; otherwise continue.

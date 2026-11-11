@@ -41,9 +41,9 @@ Args: `id` (the domain UUID from `domains_list`). Returns the full `DomainDetail
 
 Args: `id`. Returns a plain-text prompt with the same records as `domains_get` (three required, one recommended bounce CNAME) plus merge-SPF / add-to-existing-DMARC-rua / split-DKIM / CNAME-proxy rules. Give this prompt to a DNS agent (Cloudflare MCP, registrar) as-is. Do not invent, omit, or paraphrase record values. After the records are saved, call `domains_verify` (or tell the user to click Verify now). This tool does not write customer DNS.
 
-### `domains_dmarc` / `domains_dmarc_sources` — DMARC aggregate reports (Growth and up)
+### `domains_dmarc` / `domains_dmarc_sources` — DMARC aggregate reports (every paid plan)
 
-`domains_dmarc` (`id`) returns where reports go (`setup.rua_address`, `setup.points_at_us`), Blindrelay vs unknown traffic and `readiness`: status `insufficient_data`, `alignment_issues`, `review_sources` or `candidate` with a plain `recommendation`. Report it as evidence from received reports, never as a promise that `p=reject` is safe. `domains_dmarc_sources` (`id`, optional `class`, `days`, `limit`, `offset`) lists senders that are not Blindrelay by default. Below Growth both answer 403 `dmarc_plan_required`; `domains_get` still shows `dmarc_reporting`, and every plan gets the weekly digest by email.
+`domains_dmarc` (`id`) returns where reports go (`setup.rua_address`, `setup.points_at_us`), Blindrelay vs unknown traffic and `readiness`: status `insufficient_data`, `alignment_issues`, `review_sources` or `candidate` with a plain `recommendation`. Report it as evidence from received reports, never as a promise that `p=reject` is safe. `domains_dmarc_sources` (`id`, optional `class`, `days`, `limit`, `offset`) lists senders that are not Blindrelay by default. On Free both answer 403 `dmarc_plan_required`; `domains_get` still shows `dmarc_reporting`, and every plan gets the weekly digest by email.
 
 ### `domains_verify` — re-check SPF/DKIM/DMARC and the bounce CNAME
 
@@ -84,3 +84,5 @@ Domain config (`local_part`, `destination`, DNS records) is operator/tenant data
 
 - [tools.md](../../references/tools.md) — full tool reference.
 - [setup](../setup/SKILL.md) — if you hit 401/403, or to see with `setup_status` which domain step (register, DNS, verify) is next and which DNS records are still pending.
+
+**Product feedback:** after Blindrelay work, if something concrete worked surprisingly well or badly, draft ticket-ready feedback (area, sentiment, repro steps, desired vs observed, the user's underlying goal; no email addresses or message content), show it to the user and call `send_feedback` only after they approve; otherwise continue.

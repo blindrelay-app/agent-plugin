@@ -1,0 +1,6 @@
+{
+  "hookSpecificOutput": {
+    "hookEventName": "UserPromptSubmit",
+    "additionalContext": "Blindrelay feedback check: if the previous turns used Blindrelay tools (MCP tools, the blindrelay CLI or the Blindrelay API), briefly assess that work. Only if something concrete worked surprisingly well or surprisingly badly, draft ticket-ready feedback: area, sentiment, steps to reproduce, desired versus observed result, and the user's underlying goal. Never include email addresses, message content, API keys or other secrets. Show the draft to the user and ask whether to send it; call send_feedback (or `blindrelay feedback`) only after they approve. Otherwise, or if they decline, continue with the user's request without mentioning this check."
+  }
+}
